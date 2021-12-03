@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %} {% block content %}
+
+<div class="header-bar">
+	<h1>Hello {{request.user|title}}</h1>
+	<!--Shows Username and title is to make first letter capital -->
+	<h3>You have {{count}} incomplete task{{count|pluralize:'s'}}</h3>
+	<!--To pluralize task ie for 2 task it shows tasks and for 1 task it shows only task-->
+	<div>
+		{% if request.user.is_authenticated %}
+		<!-- <p>{{request.user}}</p> --> <!--Displays UserName-->
+		<a href="{% url 'logout' %}">LogOut</a>
+		{% else %}
+		<a href="{% url 'login' %}">LogIn</a>
+		{% endif %}
+
+	</div>
+</div>
+
+
+<hr />
+
+<h1>My To Do List {{color}}</h1>
+<a href="{% url 'task-create' %}">Add Task</a>
+
+<form action="" method="get">
+	<input type="text" name="search-area" value="{{search_input}}" />
+	<input type="submit" value="Search" />
+</form>
+
+<table>
+	<tr>
+		<th>Items</th>
+		<th></th>
+		<th></th>
+	</tr>
+	{% for task in tasks %}
+	<tr>
+		<td>{{task.title}}</td>
+		<!-- <td><a href="{% url 'task' task.id %}">View</a></td> -->
+		<!---In urlpatterns TaskDetail name=task and there is primary key that why anchor tag syntax is like that.-->
+		<td><a href="{% url 'task-update' task.id %}">Edit</a></td>
+		<!---task.id means the id of task which we are going to update-->
+		<td><a href="{% url 'task-delete' task.id %}">Delete</a></td>
+	</tr>
+	{% empty %}
+	<h3>No Items In List</h3>
+	{% endfor %}
+</table>
+{% endblock content %}
